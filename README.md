@@ -25,9 +25,10 @@ Features
 -	Logging support
 -	Docker support
 -	CI/CD workflow concept
+
  
 Clean Architecture
-This project follows the principles of Clean Architecture by separating responsibilities into clear layers. This makes the code easier to maintain, test, and extend.
+This project seperates responsibilities into clear layers. This makes the code easier to maintain, test, and extend.
 Example structure:
 -	Domain Layer
 Contains the core business entities and rules.
