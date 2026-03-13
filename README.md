@@ -134,27 +134,6 @@ Communication Flow:
 6.	The Notification Service processes the notification.
 
 
-
-Client
-   |
-   v
-API Gateway
-   |
-   +-------------------+
-   |                   |
-   v                   v
-AuthService          TaskAPI
-                         |
-                         +----------------------+
-                         |                      |
-                         v                      v
-                      TaskDB                TaskQueue
-                         |
-                         v
-                TaskWorkerService
-                         |
-                         v
-                NotificationService
-                         |
-                         v
-                Email / Log / Console
+Client → API Gateway → AuthService
+                     → TaskAPI → TaskDB
+                               → TaskQueue → TaskWorkerService → NotificationService → Email / Log / Console
