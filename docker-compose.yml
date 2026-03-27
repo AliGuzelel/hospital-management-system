@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  auth_service:
+    build: ./auth_service
+    container_name: auth_service
+    ports:
+      - "8001:8001"
+    env_file:
+      - .env
+
+  task_service:
+    build: ./task_service
+    container_name: task_service
+    ports:
+      - "8002:8002"
+    env_file:
+      - .env
+    depends_on:
+      - notification_service
+
+  notification_service:
+    build: ./notification_service
+    container_name: notification_service
+    ports:
+      - "8003:8003"
+    env_file:
+      - .env
+
+  api_gateway:
+    build: ./api_gateway
+    container_name: api_gateway
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - auth_service
+      - task_service
