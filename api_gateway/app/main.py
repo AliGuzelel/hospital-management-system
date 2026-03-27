@@ -1,11 +1,12 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import requests
+import os
 
 app = FastAPI(title="API Gateway")
 
-AUTH_SERVICE_URL = "http://127.0.0.1:8001"
-TASK_SERVICE_URL = "http://127.0.0.1:8002"
+AUTH_SERVICE_URL = os.getenv("AUTH_SERVICE_URL", "http://localhost:8001")
+TASK_SERVICE_URL = os.getenv("TASK_SERVICE_URL", "http://localhost:8002")
 
 
 class LoginRequest(BaseModel):
@@ -21,6 +22,11 @@ class TaskRequest(BaseModel):
 @app.get("/")
 def root():
     return {"message": "API Gateway is running"}
+
+
+@app.get("/health")
+def health():
+    return {"status": "UP", "service": "api_gateway"}
 
 
 @app.post("/auth/login")

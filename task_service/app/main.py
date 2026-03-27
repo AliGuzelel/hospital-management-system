@@ -1,8 +1,11 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import requests
+import os
 
 app = FastAPI(title="Task Service")
+
+NOTIFICATION_SERVICE_URL = os.getenv("NOTIFICATION_SERVICE_URL", "http://localhost:8003")
 
 tasks = []
 task_id_counter = 1
@@ -16,6 +19,11 @@ class TaskRequest(BaseModel):
 @app.get("/")
 def root():
     return {"message": "Task Service is running"}
+
+
+@app.get("/health")
+def health():
+    return {"status": "UP", "service": "task_service"}
 
 
 @app.post("/tasks")
@@ -33,7 +41,7 @@ def create_task(data: TaskRequest):
 
     try:
         requests.post(
-            "http://127.0.0.1:8003/notify",
+            f"{NOTIFICATION_SERVICE_URL}/notify",
             json={"message": f"Task created: {data.title}"}
         )
     except:
@@ -56,7 +64,7 @@ def update_task(task_id: int, data: TaskRequest):
 
             try:
                 requests.post(
-                    "http://127.0.0.1:8003/notify",
+                    f"{NOTIFICATION_SERVICE_URL}/notify",
                     json={"message": f"Task updated: {data.title}"}
                 )
             except:
@@ -75,7 +83,7 @@ def delete_task(task_id: int):
 
             try:
                 requests.post(
-                    "http://127.0.0.1:8003/notify",
+                    f"{NOTIFICATION_SERVICE_URL}/notify",
                     json={"message": f"Task deleted: {task['title']}"}
                 )
             except:

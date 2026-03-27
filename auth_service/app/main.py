@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 app = FastAPI(title="Auth Service")
 
@@ -18,13 +18,18 @@ tokens = {}
 
 
 class LoginRequest(BaseModel):
-    username: str
-    password: str
+    username: str = Field(..., min_length=1)
+    password: str = Field(..., min_length=1)
 
 
 @app.get("/")
 def root():
     return {"message": "Auth Service is running"}
+
+
+@app.get("/health")
+def health():
+    return {"status": "UP", "service": "auth_service"}
 
 
 @app.post("/login")
