@@ -26,9 +26,11 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f "${{ matrix.service }}/requirements.txt" ]; then pip install -r "${{ matrix.service }}/requirements.txt"; fi
+          cd ${{ matrix.service }}
+          pip install -r requirements.txt
           pip install pytest
 
       - name: Run tests
         run: |
-          pytest ${{ matrix.service }}/tests
+          cd ${{ matrix.service }}
+          pytest tests
