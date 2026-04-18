@@ -1,0 +1,176 @@
+services:
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8000:8000"
+    env_file: .env
+    volumes:
+      - gateway-data:/data
+    depends_on:
+      auth-service:
+        condition: service_healthy
+      patient-service:
+        condition: service_healthy
+      doctor-service:
+        condition: service_healthy
+      appointment-service:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "8001:8001"
+    env_file: .env
+    volumes:
+      - auth-data:/data
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/health')",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  patient-service:
+    build: ./patient-service
+    ports:
+      - "8002:8002"
+    env_file: .env
+    volumes:
+      - patient-data:/data
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8002/health')",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  doctor-service:
+    build: ./doctor-service
+    ports:
+      - "8003:8003"
+    env_file: .env
+    volumes:
+      - doctor-data:/data
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8003/health')",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  appointment-service:
+    build: ./appointment-service
+    ports:
+      - "8004:8004"
+    env_file: .env
+    volumes:
+      - appointment-data:/data
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      patient-service:
+        condition: service_healthy
+      doctor-service:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8004/health')",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 25s
+
+  notification-service:
+    build: ./notification-service
+    ports:
+      - "8005:8005"
+    env_file: .env
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8005/health')",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 25s
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  prometheus:
+    image: prom/prometheus:v2.53.1
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+
+  grafana:
+    image: grafana/grafana:11.2.0
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_DEFAULT_THEME: dark
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+
+volumes:
+  auth-data:
+  patient-data:
+  doctor-data:
+  appointment-data:
+  gateway-data:
