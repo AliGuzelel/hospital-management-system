@@ -72,5 +72,4 @@ To run the system:
 ```bash
 git clone https://github.com/AliGuzelel/hospital-management-system.git
 cd hospital-management-system
-docker-compose up --build<img width="1376" height="768" alt="hospital-system-request-flow" src="https://github.com/user-attachments/assets/51123deb-1c93-419d-aa0e-72e37c35aa97" />
-<img width="1376" height="768" alt="hospital-system-architecture" src="https://github.com/user-attachments/assets/913d214c-95ae-46ee-aaca-6d9c3320bbfe" />
+docker-compose up --build
