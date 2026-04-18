@@ -1,36 +1,68 @@
-name: CI Pipeline
+name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main, master]
   pull_request:
-    branches: [ main ]
+    branches: [main, master]
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: hospital-system
 
 jobs:
-  test-services:
+  test:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        service: [api_gateway, auth_service, task_service, notification_service]
-
+        include:
+          - service: api-gateway
+          - service: auth-service
+          - service: patient-service
+          - service: doctor-service
+          - service: appointment-service
+          - service: notification-service
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "3.11"
 
-      - name: Install dependencies
+      - name: Install service dependencies
         run: |
           python -m pip install --upgrade pip
-          cd ${{ matrix.service }}
-          pip install -r requirements.txt
-          pip install pytest
+          pip install -r ${{ matrix.service }}/requirements.txt
 
-      - name: Run tests
+      - name: pytest (service)
+        env:
+          JWT_SECRET: test-secret
+          INTERNAL_SERVICE_TOKEN: internal-token
+          AUTH_DATABASE_URL: sqlite+aiosqlite:///:memory:
+          PATIENT_DATABASE_URL: sqlite+aiosqlite:///:memory:
+          DOCTOR_DATABASE_URL: sqlite+aiosqlite:///:memory:
+          APPOINTMENT_DATABASE_URL: sqlite+aiosqlite:///:memory:
+          PATIENT_SERVICE_URL: http://localhost:8002
+          DOCTOR_SERVICE_URL: http://localhost:8003
+          RABBITMQ_URL: amqp://guest:guest@localhost:5672/
         run: |
           cd ${{ matrix.service }}
-          pytest tests
+          pytest -q
+
+      - name: pytest (repo layout smoke)
+        if: matrix.service == 'api-gateway'
+        run: pytest -q tests
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: docker compose config
+        working-directory: hospital-system
+        run: docker compose config
+
+      - name: docker compose build
+        working-directory: hospital-system
+        run: docker compose build
