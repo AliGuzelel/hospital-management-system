@@ -4,30 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2469ef19-4930-49fc-9100-238d504a237b" name="Changes" comment="updated">
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/ci.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_gateway/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_gateway/app/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_gateway/requirements.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_gateway/tests/test_gateway.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth_service/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth_service/app/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth_service/requirements.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth_service/tests/test_auth.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification_service/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification_service/app/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification_service/requirements.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification_service/tests/test_notification.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/task_service/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/task_service/app/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/task_service/requirements.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/task_service/tests/test_tasks.py" beforeDir="false" />
-    </list>
+    <list default="true" id="2469ef19-4930-49fc-9100-238d504a237b" name="Changes" comment="updated" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -95,7 +72,23 @@
       <option name="project" value="LOCAL" />
       <updated>1774608467527</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="updated">
+      <option name="closed" value="true" />
+      <created>1776546377772</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1776546377772</updated>
+    </task>
+    <task id="LOCAL-00003" summary="updated">
+      <option name="closed" value="true" />
+      <created>1776546412812</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1776546412812</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
