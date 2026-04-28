@@ -19,3 +19,11 @@ def cancel(appointment_id: int, db: Session = Depends(get_db)):
     if not result:
         raise HTTPException(status_code=404, detail="Appointment not found")
     return result
+
+
+@router.post("/{appointment_id}/complete", response_model=AppointmentOut)
+def complete(appointment_id: int, db: Session = Depends(get_db)):
+    result = AppointmentService.complete(db, appointment_id)
+    if not result:
+        raise HTTPException(status_code=404, detail="Appointment not found")
+    return result

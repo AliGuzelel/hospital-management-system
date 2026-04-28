@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException, Request
+from typing import Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from app.config.settings import settings
@@ -103,6 +105,23 @@ async def create_doctor(
     )
 
 
+@router.get("/doctors/{doctor_id}/appointments")
+async def list_doctor_appointments(
+    doctor_id: int,
+    request: Request,
+    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
+    appointment_filter: Optional[str] = Query(default=None, alias="type"),
+):
+    rate_guard(request)
+    auth_guard(credentials, {"admin", "doctor"})
+    params = {"type": appointment_filter} if appointment_filter else None
+    return await ProxyService.forward(
+        "GET",
+        f"{settings.appointment_service_url}/doctors/{doctor_id}/appointments",
+        params=params,
+    )
+
+
 @router.get("/doctors/{doctor_id}")
 async def get_doctor(
     doctor_id: int,
@@ -152,4 +171,90 @@ async def cancel_appointment(
     auth_guard(credentials, {"admin", "patient"})
     return await ProxyService.forward(
         "DELETE", f"{settings.appointment_service_url}/appointments/{appointment_id}"
+    )
+
+
+@router.post("/appointments/{appointment_id}/complete")
+async def complete_appointment(
+    appointment_id: int,
+    request: Request,
+    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
+):
+    rate_guard(request)
+    auth_guard(credentials, {"admin", "doctor"})
+    return await ProxyService.forward(
+        "POST", f"{settings.appointment_service_url}/appointments/{appointment_id}/complete"
+    )
+
+
+@router.get("/invoices")
+async def list_invoices(
+    request: Request,
+    patient_id: int | None = Query(default=None),
+    doctor_id: int | None = Query(default=None),
+    status: str | None = Query(default=None),
+    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
+):
+    rate_guard(request)
+    auth_guard(credentials, {"admin", "doctor", "patient"})
+    params = {
+        "patient_id": patient_id,
+        "doctor_id": doctor_id,
+        "status": status,
+    }
+    filtered = {k: v for k, v in params.items() if v is not None}
+    return await ProxyService.forward(
+        "GET", f"{settings.appointment_service_url}/invoices", params=filtered or None
+    )
+
+
+@router.get("/invoices/{invoice_id}")
+async def get_invoice(
+    invoice_id: int,
+    request: Request,
+    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
+):
+    rate_guard(request)
+    auth_guard(credentials, {"admin", "doctor", "patient"})
+    return await ProxyService.forward(
+        "GET", f"{settings.appointment_service_url}/invoices/{invoice_id}"
+    )
+
+
+@router.patch("/invoices/{invoice_id}/mark-paid")
+async def mark_invoice_paid(
+    invoice_id: int,
+    request: Request,
+    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
+):
+    rate_guard(request)
+    auth_guard(credentials, {"admin"})
+    return await ProxyService.forward(
+        "PATCH", f"{settings.appointment_service_url}/invoices/{invoice_id}/mark-paid"
+    )
+
+
+@router.get("/notifications/{user_id}")
+async def list_notifications(
+    user_id: int,
+    request: Request,
+    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
+):
+    rate_guard(request)
+    auth_guard(credentials, {"admin", "doctor", "patient"})
+    return await ProxyService.forward(
+        "GET", f"{settings.appointment_service_url}/notifications/{user_id}"
+    )
+
+
+@router.put("/notifications/{notification_id}/read")
+async def mark_notification_read(
+    notification_id: int,
+    request: Request,
+    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
+):
+    rate_guard(request)
+    auth_guard(credentials, {"admin", "doctor", "patient"})
+    return await ProxyService.forward(
+        "PUT", f"{settings.appointment_service_url}/notifications/{notification_id}/read"
     )
