@@ -38,6 +38,12 @@ The system demonstrates key software engineering, distributed systems, and DevOp
 ## Architecture
 
 The system follows a microservices architecture, where each service is independently developed and deployed.
+## Architecture Diagram
+
+<img width="1536" height="1024" alt="architecture-diagram2" src="https://github.com/user-attachments/assets/df09a701-fdaf-40f4-9fcf-2e5ec92628c3" />
+
+
+---
 
 ### Services
 - Auth Service
@@ -179,9 +185,12 @@ The system is designed to run in a cloud-like environment:
 
 ---
 
+
 ## Conclusion
 
 This project demonstrates how a traditional hospital system can be transformed into a scalable, secure, and production-ready microservices platform. It integrates modern software development practices including distributed systems, DevOps, observability, and security, preparing it for real-world applications.
+
+---
 
 To run the system:
 
