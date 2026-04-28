@@ -1,38 +1,75 @@
-# Hospital Management System (Microservices)
+# Hospital Management System (Microservice)
 
-## Services
-- API Gateway (`8000`)
-- Auth Service (`8001`)
-- Patient Service (`8002`)
-- Doctor Service (`8003`)
-- Appointment Service (`8004`)
-- Notification Service (`8005`)
-- RabbitMQ (`5672`, UI: `15672`)
-- Prometheus (`9090`)
-- Grafana (`3000`)
+This project is a microservices-based Hospital Management System developed using FastAPI, Docker, and PostgreSQL. The goal of this system is to simulate a real-world backend architecture for managing hospital operations such as user authentication, patient records, doctor information, appointment scheduling, and notifications.
 
-## Architecture
-All services use clean architecture style modules:
-- `routes/` -> `services/` -> `models/` -> `database/`
-- `schemas/` for DTO validation
-- `config/` for environment and logging
+The system is designed with scalability, modularity, and maintainability in mind. Each service is independent and can be developed, deployed, and updated without affecting other parts of the system.
 
 ## Features
-- JWT auth with roles (`admin`, `doctor`, `patient`)
-- API gateway routing + token guard + rate limiting
-- Patient and Doctor management
-- Appointment booking/canceling with cross-service validation
-- RabbitMQ async events consumed by notification service
-- `/health` + `/metrics` for each service
-- Prometheus and Grafana included
 
-## Run
+- JWT-based authentication and authorization
+- Role-based access control (Admin, Doctor, Patient)
+- Patient profile and record management
+- Doctor profile and availability management
+- Appointment booking, updating, and cancellation
+- Notification service for alerts and system messages
+- API Gateway for centralized routing and request handling
+- Dockerized architecture for easy deployment
+- Monitoring support using Prometheus and Grafana
+
+## System Architecture
+
+The application follows a microservices architecture where each service handles a specific responsibility. All client requests go through the API Gateway, which manages routing, authentication validation, and request forwarding.
+
+Services included in the system:
+
+- API Gateway: Acts as the single entry point. Handles routing, authentication checks, and request/response handling.
+- Auth Service: Manages user registration, login, password hashing, and JWT token generation.
+- Patient Service: Handles patient-related data such as profiles and records.
+- Doctor Service: Manages doctor information including specialization and availability.
+- Appointment Service: Responsible for scheduling, updating, and canceling appointments.
+- Notification Service: Sends system notifications and can be extended for email/SMS integration.
+- Hospital Service: Manages general hospital-related configurations and information.
+
+Each service is implemented as an independent FastAPI application and communicates with others using REST APIs.
+
+## Tech Stack
+
+Backend: Python 3.11, FastAPI  
+Database: PostgreSQL  
+Containerization: Docker, Docker Compose  
+API Communication: REST  
+Monitoring: Prometheus, Grafana  
+Configuration: Environment variables (.env), Pydantic settings  
+
+## Project Structure
+
+hospital-management-system/
+│
+├── api-gateway/
+├── auth-service/
+├── patient-service/
+├── doctor-service/
+├── appointment-service/
+├── notification-service/
+├── hospital-system/
+│
+├── docker-compose.yml
+├── README.md
+└── .env
+
+Each service contains its own routes, models, schemas, and business logic, following a clean and organized structure.
+
+## Getting Started
+
+Prerequisites:
+
+- Docker and Docker Compose installed
+- Git
+- Python 3.11 (optional for local development)
+
+To run the system:
+
 ```bash
-docker compose up --build
-```
-
-## CI/CD
-GitHub Actions workflow in `.github/workflows/ci.yml`:
-- installs service dependencies
-- runs tests for every service
-- builds Docker images
+git clone https://github.com/AliGuzelel/hospital-management-system.git
+cd hospital-management-system
+docker-compose up --build
