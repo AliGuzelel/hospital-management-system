@@ -1,4 +1,4 @@
-# Hospital Management System (Microservices Architecture)
+# Hospital Management System
 
 ## Overview
 This project is a production-oriented Hospital Management System developed using a microservices architecture. The system simulates a real-world healthcare backend, supporting core functionalities such as authentication, patient and doctor management, appointment scheduling, notifications, and invoice handling.
