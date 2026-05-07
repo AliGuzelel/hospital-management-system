@@ -117,6 +117,19 @@ The system is designed to run in a cloud-like environment:
 
 ---
 
+## Database
+
+- Default database: **SQLite** (service-level databases)
+- Database configuration is environment-variable driven:
+  - `AUTH_DATABASE_URL`
+  - `PATIENT_DATABASE_URL`
+  - `DOCTOR_DATABASE_URL`
+  - `APPOINTMENT_DATABASE_URL`
+- Default example values are defined in `hospital-system/.env.example` using `sqlite+aiosqlite` URLs.
+- You can switch to PostgreSQL by replacing those URLs with PostgreSQL connection strings.
+
+---
+
 ## CI/CD & DevOps
 
 - CI/CD pipeline design included
@@ -166,6 +179,7 @@ The system is designed to run in a cloud-like environment:
 - Language: Python
 - Backend Framework: FastAPI
 - Server: Uvicorn
+- Database: SQLite (`aiosqlite`) by default, PostgreSQL configurable
 - Containerization: Docker
 - CI/CD: GitHub Actions
 - Monitoring: Prometheus, Grafana
@@ -198,3 +212,4 @@ To run the system:
 git clone https://github.com/AliGuzelel/hospital-management-system.git
 cd hospital-management-system
 docker-compose up --build
+```
