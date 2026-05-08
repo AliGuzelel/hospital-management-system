@@ -212,4 +212,5 @@ To run the system:
 git clone https://github.com/AliGuzelel/hospital-management-system.git
 cd hospital-management-system
 docker-compose up --build
+http://localhost:8000/docs
 ```
