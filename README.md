@@ -183,7 +183,6 @@ The system is designed to run in a cloud-like environment:
 - Containerization: Docker
 - CI/CD: GitHub Actions
 - Monitoring: Prometheus, Grafana
-- Observability: OpenTelemetry
 
 ---
 
